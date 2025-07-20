@@ -10,3 +10,46 @@
 export interface DemoResponse {
   message: string;
 }
+
+// Device Heartbeat Types
+export interface HeartbeatRecord {
+  uuid: string;
+  ip_address: string;
+  created_on: string;
+  status: 'online' | 'problematic' | 'offline';
+  last_seen: string;
+}
+
+export interface DeviceMapping {
+  id: string;
+  ip_address: string;
+  device_name: string;
+  created_on: string;
+}
+
+// Recording Types
+export interface RecordingHistory {
+  id: string;
+  cnic: string | null;
+  start_time: string | null;
+  end_time: string | null;
+  file_name: string | null;
+  created_on: string | null;
+  ip_address: string | null;
+  duration?: number;
+  status: 'completed' | 'in_progress' | 'failed';
+}
+
+export interface PaginationParams {
+  page: number;
+  limit: number;
+  search?: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
