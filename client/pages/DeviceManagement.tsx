@@ -1,0 +1,268 @@
+import { useState, useEffect } from 'react';
+import { DeviceMapping } from '@shared/api';
+import { cn } from '@/lib/utils';
+import { 
+  Plus, 
+  Pencil, 
+  Trash2, 
+  Save, 
+  X,
+  Settings,
+  Search
+} from 'lucide-react';
+
+// Mock data
+const generateMockDevices = (): DeviceMapping[] => [
+  {
+    id: '1',
+    ip_address: '192.168.1.101',
+    device_name: 'Reception Camera',
+    created_on: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: '2',
+    ip_address: '192.168.1.102',
+    device_name: 'Main Hall Recorder',
+    created_on: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: '3',
+    ip_address: '192.168.1.103',
+    device_name: 'Security Camera 1',
+    created_on: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+];
+
+export function DeviceManagement() {
+  const [devices, setDevices] = useState<DeviceMapping[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [newDevice, setNewDevice] = useState({ ip_address: '', device_name: '' });
+
+  useEffect(() => {
+    setDevices(generateMockDevices());
+  }, []);
+
+  const filteredDevices = devices.filter(device =>
+    device.ip_address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    device.device_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleAdd = () => {
+    if (newDevice.ip_address && newDevice.device_name) {
+      const device: DeviceMapping = {
+        id: Date.now().toString(),
+        ip_address: newDevice.ip_address,
+        device_name: newDevice.device_name,
+        created_on: new Date().toISOString(),
+      };
+      setDevices([...devices, device]);
+      setNewDevice({ ip_address: '', device_name: '' });
+      setIsAdding(false);
+    }
+  };
+
+  const handleEdit = (id: string, field: keyof DeviceMapping, value: string) => {
+    setDevices(devices.map(device =>
+      device.id === id ? { ...device, [field]: value } : device
+    ));
+  };
+
+  const handleDelete = (id: string) => {
+    setDevices(devices.filter(device => device.id !== id));
+  };
+
+  const handleSaveEdit = () => {
+    setEditingId(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    // Reload original data in real app
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Device Management</h1>
+          <p className="text-gray-600">Manage IP address to device name mappings</p>
+        </div>
+        <button
+          onClick={() => setIsAdding(true)}
+          className="flex items-center space-x-2 rounded-lg bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 transition-colors"
+        >
+          <Plus className="h-4 w-4" />
+          <span>Add Device</span>
+        </button>
+      </div>
+
+      {/* Search */}
+      <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search by IP address or device name..."
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* Device List */}
+      <div className="bg-white rounded-lg border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-900">Device Mappings</h2>
+        </div>
+        
+        <div className="overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  IP Address
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Device Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Created On
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {/* Add New Device Row */}
+              {isAdding && (
+                <tr className="bg-blue-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="text"
+                      placeholder="192.168.1.xxx"
+                      className="w-full px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent"
+                      value={newDevice.ip_address}
+                      onChange={(e) => setNewDevice({ ...newDevice, ip_address: e.target.value })}
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="text"
+                      placeholder="Device Name"
+                      className="w-full px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent"
+                      value={newDevice.device_name}
+                      onChange={(e) => setNewDevice({ ...newDevice, device_name: e.target.value })}
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date().toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={handleAdd}
+                        className="text-green-600 hover:text-green-900"
+                      >
+                        <Save className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsAdding(false);
+                          setNewDevice({ ip_address: '', device_name: '' });
+                        }}
+                        className="text-gray-600 hover:text-gray-900"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              )}
+
+              {/* Existing Devices */}
+              {filteredDevices.map((device) => (
+                <tr key={device.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {editingId === device.id ? (
+                      <input
+                        type="text"
+                        className="w-full px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent"
+                        value={device.ip_address}
+                        onChange={(e) => handleEdit(device.id, 'ip_address', e.target.value)}
+                      />
+                    ) : (
+                      <span className="text-sm font-medium text-gray-900">{device.ip_address}</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {editingId === device.id ? (
+                      <input
+                        type="text"
+                        className="w-full px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent"
+                        value={device.device_name}
+                        onChange={(e) => handleEdit(device.id, 'device_name', e.target.value)}
+                      />
+                    ) : (
+                      <span className="text-sm text-gray-900">{device.device_name}</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(device.created_on).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    {editingId === device.id ? (
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={handleSaveEdit}
+                          className="text-green-600 hover:text-green-900"
+                        >
+                          <Save className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={handleCancelEdit}
+                          className="text-gray-600 hover:text-gray-900"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => setEditingId(device.id)}
+                          className="text-blue-600 hover:text-blue-900"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(device.id)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {filteredDevices.length === 0 && !isAdding && (
+          <div className="px-6 py-12 text-center">
+            <Settings className="mx-auto h-12 w-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900">No devices found</h3>
+            <p className="mt-1 text-sm text-gray-500">
+              {searchTerm ? 'No devices match your search criteria.' : 'No device mappings have been created yet.'}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
