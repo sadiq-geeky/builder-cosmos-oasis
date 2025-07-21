@@ -124,26 +124,38 @@ Both platforms support automatic deployment from GitHub:
 2. Set build command: `npm run build`
 3. Set start command: `npm start`
 
-## Database Integration
+## Database Setup
 
-To connect to your actual MySQL database, update the mock functions in:
+### Required Tables
 
-- `server/routes/heartbeat.ts`
-- `server/routes/devices.ts` 
-- `server/routes/recordings.ts`
+Run the SQL commands in `DATABASE_SETUP.sql` to create the required tables:
 
-Replace mock data with MySQL queries using your connection parameters:
+```sql
+-- Your existing tables (must exist):
+-- recording_heartbeat (uuid, ip_address, created_on)
+-- recording_history (id, cnic, start_time, end_time, file_name, CREATED_ON, ip_address)
 
-```typescript
-const mysql = require('mysql2/promise');
+-- Additional table for device management:
+CREATE TABLE device_mappings (
+  id VARCHAR(50) PRIMARY KEY,
+  ip_address VARCHAR(45) UNIQUE NOT NULL,
+  device_name VARCHAR(255) NOT NULL,
+  created_on DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'setcrmuser',
-  password: 'password',
-  database: 'setcrmuis',
-  port: 3306
-});
+### Environment Setup
+
+Copy `.env.example` to `.env` and update with your database credentials:
+
+```env
+DB_HOST=localhost
+DB_USER=setcrmuser
+DB_PASS=password
+DB_NAME=setcrmuis
+DB_PORT=3306
+PORT=3000
+NODE_ENV=production
 ```
 
 ## Environment Configuration
