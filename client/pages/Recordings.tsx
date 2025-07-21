@@ -225,6 +225,7 @@ export function Recordings() {
     setPlayingId(null);
     setCurrentAudioUrl("");
     setCurrentFileName("");
+    setCurrentRecording(null);
   };
 
   const handleDownload = (recording: RecordingHistory) => {
