@@ -164,7 +164,7 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+  const progress = duration > 0 && metadataLoaded ? (currentTime / duration) * 100 : 0;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
