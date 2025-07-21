@@ -10,6 +10,8 @@ import {
   Activity,
   Server,
   FileVideo,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
