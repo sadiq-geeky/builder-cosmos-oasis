@@ -18,7 +18,12 @@ interface AudioPlayerProps {
   databaseDuration?: number; // Duration in seconds from database
 }
 
-export function AudioPlayer({ audioUrl, fileName, onClose, databaseDuration }: AudioPlayerProps) {
+export function AudioPlayer({
+  audioUrl,
+  fileName,
+  onClose,
+  databaseDuration,
+}: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -334,7 +339,9 @@ export function AudioPlayer({ audioUrl, fileName, onClose, databaseDuration }: A
             {/* Additional Info */}
             <div className="text-center text-sm text-gray-500">
               Playback Rate: {playbackRate}x | Duration: {formatTime(duration)}{" "}
-              {databaseDuration && <span className="text-green-600">(from database)</span>}
+              {databaseDuration && (
+                <span className="text-green-600">(from database)</span>
+              )}
               |
               {playbackRate !== 1 &&
                 ` Adjusted Duration: ${formatTime(duration / playbackRate)}`}

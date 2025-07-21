@@ -163,7 +163,8 @@ export function Recordings() {
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [currentAudioUrl, setCurrentAudioUrl] = useState<string>("");
   const [currentFileName, setCurrentFileName] = useState<string>("");
-  const [currentRecording, setCurrentRecording] = useState<RecordingHistory | null>(null);
+  const [currentRecording, setCurrentRecording] =
+    useState<RecordingHistory | null>(null);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
   const loadRecordings = async () => {

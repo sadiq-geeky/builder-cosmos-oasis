@@ -14,7 +14,7 @@ export interface DemoResponse {
 // Device Heartbeat Types
 export interface HeartbeatRecord {
   device_name: string;
-  status: 'online' | 'problematic' | 'offline';
+  status: "online" | "problematic" | "offline";
   last_seen: string;
 }
 
@@ -36,7 +36,7 @@ export interface RecordingHistory {
   ip_address: string | null;
   duration?: number;
   duration_seconds?: number;
-  status: 'completed' | 'in_progress' | 'failed';
+  status: "completed" | "in_progress" | "failed";
 }
 
 export interface PaginationParams {

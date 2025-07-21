@@ -61,7 +61,10 @@ export const getRecordings: RequestHandler = async (req, res) => {
       LIMIT ${limitNum} OFFSET ${offset}
     `;
 
-    const recordings = await executeQuery<RecordingHistory>(dataQuery, queryParams);
+    const recordings = await executeQuery<RecordingHistory>(
+      dataQuery,
+      queryParams,
+    );
 
     const totalPages = Math.ceil(total / limitNum);
 
