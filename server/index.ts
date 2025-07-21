@@ -41,8 +41,14 @@ export function createServer() {
   app.get("/api/heartbeats", getHeartbeats);
   app.post("/api/heartbeats", postHeartbeat);
 
-  // PHP-equivalent heartbeat submit route
+    // PHP-equivalent heartbeat submit route
   app.post("/api/heartbeat/submit", submitHeartbeat);
+
+  // Voice upload route (form-data with file upload)
+  app.post("/api/voice/upload", uploadMiddleware, uploadVoice);
+
+  // Audio file serving route for playback
+  app.get("/api/audio/:filename", serveAudio);
 
   // Device management routes
   app.get("/api/devices", getDevices);
