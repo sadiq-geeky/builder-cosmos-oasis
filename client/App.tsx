@@ -10,6 +10,7 @@ import { DashboardLayout } from "./components/DashboardLayout";
 import { DeviceMonitoring } from "./pages/DeviceMonitoring";
 import { DeviceManagement } from "./pages/DeviceManagement";
 import { Recordings } from "./pages/Recordings";
+import { VoiceUpload } from "./pages/VoiceUpload";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
