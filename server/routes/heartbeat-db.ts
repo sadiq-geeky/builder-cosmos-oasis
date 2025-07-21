@@ -20,12 +20,12 @@ export const getHeartbeats: RequestHandler = async (req, res) => {
       FROM setcrmuis.recording_heartbeat 
       ORDER BY created_on DESC
     `;
-    
+
     const heartbeats = await executeQuery<HeartbeatRecord>(query);
     res.json(heartbeats);
   } catch (error) {
-    console.error('Error fetching heartbeats:', error);
-    res.status(500).json({ error: 'Failed to fetch heartbeats' });
+    console.error("Error fetching heartbeats:", error);
+    res.status(500).json({ error: "Failed to fetch heartbeats" });
   }
 };
 
@@ -33,9 +33,11 @@ export const getHeartbeats: RequestHandler = async (req, res) => {
 export const postHeartbeat: RequestHandler = async (req, res) => {
   try {
     const { uuid, ip_address } = req.body;
-    
+
     if (!uuid || !ip_address) {
-      return res.status(400).json({ error: 'UUID and IP address are required' });
+      return res
+        .status(400)
+        .json({ error: "UUID and IP address are required" });
     }
 
     // Insert heartbeat into database
@@ -43,19 +45,19 @@ export const postHeartbeat: RequestHandler = async (req, res) => {
       INSERT INTO setcrmuis.recording_heartbeat (uuid, ip_address, created_on) 
       VALUES (?, ?, NOW())
     `;
-    
+
     await executeQuery(query, [uuid, ip_address]);
-    
-    res.json({ 
-      success: true, 
-      message: 'Heartbeat recorded',
+
+    res.json({
+      success: true,
+      message: "Heartbeat recorded",
       uuid,
       ip_address,
-      created_on: new Date().toISOString()
+      created_on: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Error recording heartbeat:', error);
-    res.status(500).json({ error: 'Failed to record heartbeat' });
+    console.error("Error recording heartbeat:", error);
+    res.status(500).json({ error: "Failed to record heartbeat" });
   }
 };
 
@@ -74,11 +76,11 @@ export const getDeviceStatus: RequestHandler = async (req, res) => {
         GROUP BY uuid
       ) latest_heartbeats
     `;
-    
+
     const [status] = await executeQuery(query);
     res.json(status);
   } catch (error) {
-    console.error('Error fetching device status:', error);
-    res.status(500).json({ error: 'Failed to fetch device status' });
+    console.error("Error fetching device status:", error);
+    res.status(500).json({ error: "Failed to fetch device status" });
   }
 };

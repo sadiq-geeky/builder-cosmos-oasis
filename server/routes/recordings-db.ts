@@ -5,30 +5,33 @@ import { executeQuery } from "../config/database";
 // Get recordings with pagination and CNIC search
 export const getRecordings: RequestHandler = async (req, res) => {
   try {
-    const { page = '1', limit = '10', search } = req.query;
-    
+    const { page = "1", limit = "10", search } = req.query;
+
     const pageNum = parseInt(page as string);
     const limitNum = parseInt(limit as string);
     const offset = (pageNum - 1) * limitNum;
-    
+
     // Build WHERE clause for CNIC search
-    let whereClause = '';
+    let whereClause = "";
     let queryParams: any[] = [];
-    
+
     if (search) {
-      whereClause = 'WHERE cnic LIKE ?';
+      whereClause = "WHERE cnic LIKE ?";
       queryParams.push(`%${search}%`);
     }
-    
+
     // Get total count
     const countQuery = `
       SELECT COUNT(*) as total 
       FROM setcrmuis.recording_history 
       ${whereClause}
     `;
-    const [countResult] = await executeQuery<{total: number}>(countQuery, queryParams);
+    const [countResult] = await executeQuery<{ total: number }>(
+      countQuery,
+      queryParams,
+    );
     const total = countResult.total;
-    
+
     // Get paginated results
     const dataQuery = `
       SELECT 
@@ -53,26 +56,27 @@ export const getRecordings: RequestHandler = async (req, res) => {
       ORDER BY CREATED_ON DESC
       LIMIT ? OFFSET ?
     `;
-    
-    const recordings = await executeQuery<RecordingHistory>(
-      dataQuery, 
-      [...queryParams, limitNum, offset]
-    );
-    
+
+    const recordings = await executeQuery<RecordingHistory>(dataQuery, [
+      ...queryParams,
+      limitNum,
+      offset,
+    ]);
+
     const totalPages = Math.ceil(total / limitNum);
-    
+
     const response: PaginatedResponse<RecordingHistory> = {
       data: recordings,
       total,
       page: pageNum,
       limit: limitNum,
-      totalPages
+      totalPages,
     };
 
     res.json(response);
   } catch (error) {
-    console.error('Error fetching recordings:', error);
-    res.status(500).json({ error: 'Failed to fetch recordings' });
+    console.error("Error fetching recordings:", error);
+    res.status(500).json({ error: "Failed to fetch recordings" });
   }
 };
 
@@ -80,7 +84,7 @@ export const getRecordings: RequestHandler = async (req, res) => {
 export const getRecording: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const query = `
       SELECT 
         id,
@@ -102,17 +106,17 @@ export const getRecording: RequestHandler = async (req, res) => {
       FROM setcrmuis.recording_history 
       WHERE id = ?
     `;
-    
+
     const recordings = await executeQuery<RecordingHistory>(query, [id]);
-    
+
     if (recordings.length === 0) {
-      return res.status(404).json({ error: 'Recording not found' });
+      return res.status(404).json({ error: "Recording not found" });
     }
 
     res.json(recordings[0]);
   } catch (error) {
-    console.error('Error fetching recording:', error);
-    res.status(500).json({ error: 'Failed to fetch recording' });
+    console.error("Error fetching recording:", error);
+    res.status(500).json({ error: "Failed to fetch recording" });
   }
 };
 
@@ -120,25 +124,25 @@ export const getRecording: RequestHandler = async (req, res) => {
 export const createRecording: RequestHandler = async (req, res) => {
   try {
     const { cnic, ip_address, file_name } = req.body;
-    
+
     const recordingId = `rec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const query = `
       INSERT INTO setcrmuis.recording_history 
       (id, cnic, start_time, file_name, CREATED_ON, ip_address) 
       VALUES (?, ?, NOW(), ?, NOW(), ?)
     `;
-    
+
     await executeQuery(query, [recordingId, cnic, file_name, ip_address]);
-    
+
     res.status(201).json({
       success: true,
       recording_id: recordingId,
-      message: 'Recording started'
+      message: "Recording started",
     });
   } catch (error) {
-    console.error('Error creating recording:', error);
-    res.status(500).json({ error: 'Failed to create recording' });
+    console.error("Error creating recording:", error);
+    res.status(500).json({ error: "Failed to create recording" });
   }
 };
 
@@ -147,21 +151,21 @@ export const updateRecording: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const { end_time } = req.body;
-    
+
     const query = `
       UPDATE setcrmuis.recording_history 
       SET end_time = ? 
       WHERE id = ?
     `;
-    
+
     await executeQuery(query, [end_time || new Date(), id]);
-    
+
     res.json({
       success: true,
-      message: 'Recording updated'
+      message: "Recording updated",
     });
   } catch (error) {
-    console.error('Error updating recording:', error);
-    res.status(500).json({ error: 'Failed to update recording' });
+    console.error("Error updating recording:", error);
+    res.status(500).json({ error: "Failed to update recording" });
   }
 };

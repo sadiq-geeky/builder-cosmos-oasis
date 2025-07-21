@@ -5,8 +5,18 @@ import { initializeDatabase } from "./config/database";
 
 // Import mock routes (default)
 import { getHeartbeats, postHeartbeat } from "./routes/heartbeat";
-import { getDevices, createDevice, updateDevice, deleteDevice } from "./routes/devices";
-import { getRecordings, getRecording, getRecordingStream, downloadRecording } from "./routes/recordings";
+import {
+  getDevices,
+  createDevice,
+  updateDevice,
+  deleteDevice,
+} from "./routes/devices";
+import {
+  getRecordings,
+  getRecording,
+  getRecordingStream,
+  downloadRecording,
+} from "./routes/recordings";
 
 // Import database routes (uncomment to use real MySQL)
 // import { getHeartbeats, postHeartbeat } from "./routes/heartbeat-db";
@@ -17,7 +27,11 @@ import { getRecordings, getRecording, getRecordingStream, downloadRecording } fr
 import { submitHeartbeat } from "./routes/heartbeat-submit";
 
 // Import voice upload routes
-import { uploadVoice, uploadMiddleware, serveAudio } from "./routes/voice-upload";
+import {
+  uploadVoice,
+  uploadMiddleware,
+  serveAudio,
+} from "./routes/voice-upload";
 
 export function createServer() {
   const app = express();
@@ -37,11 +51,11 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
-    // Heartbeat routes
+  // Heartbeat routes
   app.get("/api/heartbeats", getHeartbeats);
   app.post("/api/heartbeats", postHeartbeat);
 
-    // PHP-equivalent heartbeat submit route
+  // PHP-equivalent heartbeat submit route
   app.post("/api/heartbeat/submit", submitHeartbeat);
 
   // Voice upload route (form-data with file upload)

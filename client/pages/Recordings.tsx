@@ -1,81 +1,85 @@
-import { useState, useEffect } from 'react';
-import { RecordingHistory, PaginatedResponse } from '@shared/api';
-import { cn } from '@/lib/utils';
-import { 
-  Play, 
-  Download, 
-  Search, 
-  ChevronLeft, 
+import { useState, useEffect } from "react";
+import { RecordingHistory, PaginatedResponse } from "@shared/api";
+import { cn } from "@/lib/utils";
+import {
+  Play,
+  Download,
+  Search,
+  ChevronLeft,
   ChevronRight,
   Calendar,
   Clock,
   FileVideo,
-  Filter
-} from 'lucide-react';
+  Filter,
+} from "lucide-react";
 
 // Mock data generator
-const generateMockRecordings = (page: number, limit: number, search?: string): PaginatedResponse<RecordingHistory> => {
+const generateMockRecordings = (
+  page: number,
+  limit: number,
+  search?: string,
+): PaginatedResponse<RecordingHistory> => {
   const allRecordings: RecordingHistory[] = [
     {
-      id: 'rec-001',
-      cnic: '12345-6789012-3',
-      start_time: '2024-01-15T09:30:00Z',
-      end_time: '2024-01-15T10:15:00Z',
-      file_name: 'recording_20240115_093000.mp4',
-      created_on: '2024-01-15T09:30:00Z',
-      ip_address: '192.168.1.101',
+      id: "rec-001",
+      cnic: "12345-6789012-3",
+      start_time: "2024-01-15T09:30:00Z",
+      end_time: "2024-01-15T10:15:00Z",
+      file_name: "recording_20240115_093000.mp4",
+      created_on: "2024-01-15T09:30:00Z",
+      ip_address: "192.168.1.101",
       duration: 45,
-      status: 'completed'
+      status: "completed",
     },
     {
-      id: 'rec-002',
-      cnic: '98765-4321098-7',
-      start_time: '2024-01-15T11:00:00Z',
-      end_time: '2024-01-15T11:30:00Z',
-      file_name: 'recording_20240115_110000.mp4',
-      created_on: '2024-01-15T11:00:00Z',
-      ip_address: '192.168.1.102',
+      id: "rec-002",
+      cnic: "98765-4321098-7",
+      start_time: "2024-01-15T11:00:00Z",
+      end_time: "2024-01-15T11:30:00Z",
+      file_name: "recording_20240115_110000.mp4",
+      created_on: "2024-01-15T11:00:00Z",
+      ip_address: "192.168.1.102",
       duration: 30,
-      status: 'completed'
+      status: "completed",
     },
     {
-      id: 'rec-003',
-      cnic: '11111-2222233-4',
-      start_time: '2024-01-15T14:15:00Z',
+      id: "rec-003",
+      cnic: "11111-2222233-4",
+      start_time: "2024-01-15T14:15:00Z",
       end_time: null,
-      file_name: 'recording_20240115_141500.mp4',
-      created_on: '2024-01-15T14:15:00Z',
-      ip_address: '192.168.1.103',
+      file_name: "recording_20240115_141500.mp4",
+      created_on: "2024-01-15T14:15:00Z",
+      ip_address: "192.168.1.103",
       duration: null,
-      status: 'in_progress'
+      status: "in_progress",
     },
     {
-      id: 'rec-004',
-      cnic: '55555-6666677-8',
-      start_time: '2024-01-14T16:45:00Z',
-      end_time: '2024-01-14T17:20:00Z',
-      file_name: 'recording_20240114_164500.mp4',
-      created_on: '2024-01-14T16:45:00Z',
-      ip_address: '192.168.1.101',
+      id: "rec-004",
+      cnic: "55555-6666677-8",
+      start_time: "2024-01-14T16:45:00Z",
+      end_time: "2024-01-14T17:20:00Z",
+      file_name: "recording_20240114_164500.mp4",
+      created_on: "2024-01-14T16:45:00Z",
+      ip_address: "192.168.1.101",
       duration: 35,
-      status: 'completed'
+      status: "completed",
     },
     {
-      id: 'rec-005',
-      cnic: '12345-6789012-3',
-      start_time: '2024-01-14T10:00:00Z',
-      end_time: '2024-01-14T10:10:00Z',
-      file_name: 'recording_20240114_100000.mp4',
-      created_on: '2024-01-14T10:00:00Z',
-      ip_address: '192.168.1.102',
+      id: "rec-005",
+      cnic: "12345-6789012-3",
+      start_time: "2024-01-14T10:00:00Z",
+      end_time: "2024-01-14T10:10:00Z",
+      file_name: "recording_20240114_100000.mp4",
+      created_on: "2024-01-14T10:00:00Z",
+      ip_address: "192.168.1.102",
       duration: 10,
-      status: 'failed'
+      status: "failed",
     },
   ];
 
   // Filter by search term (CNIC)
-  const filtered = search 
-    ? allRecordings.filter(r => r.cnic?.includes(search))
+  const filtered = search
+    ? allRecordings.filter((r) => r.cnic?.includes(search))
     : allRecordings;
 
   const total = filtered.length;
@@ -88,23 +92,23 @@ const generateMockRecordings = (page: number, limit: number, search?: string): P
     total,
     page,
     limit,
-    totalPages
+    totalPages,
   };
 };
 
-const getStatusColor = (status: RecordingHistory['status']) => {
+const getStatusColor = (status: RecordingHistory["status"]) => {
   switch (status) {
-    case 'completed':
-      return 'text-green-600 bg-green-50';
-    case 'in_progress':
-      return 'text-blue-600 bg-blue-50';
-    case 'failed':
-      return 'text-red-600 bg-red-50';
+    case "completed":
+      return "text-green-600 bg-green-50";
+    case "in_progress":
+      return "text-blue-600 bg-blue-50";
+    case "failed":
+      return "text-red-600 bg-red-50";
   }
 };
 
 const formatDuration = (minutes: number | null) => {
-  if (!minutes) return '-';
+  if (!minutes) return "-";
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
   if (hours > 0) {
@@ -114,14 +118,16 @@ const formatDuration = (minutes: number | null) => {
 };
 
 export function Recordings() {
-  const [recordings, setRecordings] = useState<PaginatedResponse<RecordingHistory>>({
+  const [recordings, setRecordings] = useState<
+    PaginatedResponse<RecordingHistory>
+  >({
     data: [],
     total: 0,
     page: 1,
     limit: 10,
-    totalPages: 0
+    totalPages: 0,
   });
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [playingId, setPlayingId] = useState<string | null>(null);
@@ -145,42 +151,47 @@ export function Recordings() {
     setCurrentPage(1);
   };
 
-    const handlePlay = (recording: RecordingHistory) => {
-    if (recording.status === 'completed' && recording.file_name) {
+  const handlePlay = (recording: RecordingHistory) => {
+    if (recording.status === "completed" && recording.file_name) {
       setPlayingId(recording.id);
 
       // Check if it's an audio file (mp3, wav) or video
-      const isAudio = recording.file_name.toLowerCase().includes('.mp3') ||
-                     recording.file_name.toLowerCase().includes('.wav');
+      const isAudio =
+        recording.file_name.toLowerCase().includes(".mp3") ||
+        recording.file_name.toLowerCase().includes(".wav");
 
       if (isAudio) {
         // Create and play audio element
         const audio = new Audio(`/api/audio/${recording.file_name}`);
-        audio.play().catch(error => {
-          console.error('Error playing audio:', error);
-          alert('Error playing audio file');
+        audio.play().catch((error) => {
+          console.error("Error playing audio:", error);
+          alert("Error playing audio file");
         });
 
-        audio.addEventListener('ended', () => {
+        audio.addEventListener("ended", () => {
           setPlayingId(null);
         });
 
-        audio.addEventListener('error', () => {
+        audio.addEventListener("error", () => {
           setPlayingId(null);
-          alert('Error loading audio file');
+          alert("Error loading audio file");
         });
       } else {
         // For video files, show alert (or implement video player)
-        alert(`Playing: ${recording.file_name}\n\nIn a real implementation, this would open a video player.`);
+        alert(
+          `Playing: ${recording.file_name}\n\nIn a real implementation, this would open a video player.`,
+        );
         setTimeout(() => setPlayingId(null), 2000);
       }
     }
   };
 
   const handleDownload = (recording: RecordingHistory) => {
-    if (recording.status === 'completed' && recording.file_name) {
+    if (recording.status === "completed" && recording.file_name) {
       // In a real app, this would trigger file download
-      alert(`Downloading: ${recording.file_name}\n\nIn a real implementation, this would start the file download.`);
+      alert(
+        `Downloading: ${recording.file_name}\n\nIn a real implementation, this would start the file download.`,
+      );
     }
   };
 
@@ -188,18 +199,18 @@ export function Recordings() {
     const pages = [];
     const maxVisible = 5;
     const half = Math.floor(maxVisible / 2);
-    
+
     let start = Math.max(1, currentPage - half);
     let end = Math.min(recordings.totalPages, start + maxVisible - 1);
-    
+
     if (end - start + 1 < maxVisible) {
       start = Math.max(1, end - maxVisible + 1);
     }
-    
+
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
-    
+
     return pages;
   };
 
@@ -209,7 +220,9 @@ export function Recordings() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Recordings</h1>
-          <p className="text-gray-600">View and manage recording history with playback functionality</p>
+          <p className="text-gray-600">
+            View and manage recording history with playback functionality
+          </p>
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-500">
           <FileVideo className="h-4 w-4" />
@@ -242,9 +255,11 @@ export function Recordings() {
       {/* Recordings Table */}
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Recording History</h2>
+          <h2 className="text-lg font-semibold text-gray-900">
+            Recording History
+          </h2>
         </div>
-        
+
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -273,12 +288,16 @@ export function Recordings() {
               {recordings.data.map((recording) => (
                 <tr key={recording.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {recording.cnic || '-'}
+                    {recording.cnic || "-"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex items-center space-x-1">
                       <Calendar className="h-4 w-4" />
-                      <span>{recording.start_time ? new Date(recording.start_time).toLocaleString() : '-'}</span>
+                      <span>
+                        {recording.start_time
+                          ? new Date(recording.start_time).toLocaleString()
+                          : "-"}
+                      </span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -288,24 +307,29 @@ export function Recordings() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {recording.ip_address || '-'}
+                    {recording.ip_address || "-"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={cn(
-                      "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize",
-                      getStatusColor(recording.status)
-                    )}>
-                      {recording.status.replace('_', ' ')}
+                    <span
+                      className={cn(
+                        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize",
+                        getStatusColor(recording.status),
+                      )}
+                    >
+                      {recording.status.replace("_", " ")}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => handlePlay(recording)}
-                        disabled={recording.status !== 'completed' || playingId === recording.id}
+                        disabled={
+                          recording.status !== "completed" ||
+                          playingId === recording.id
+                        }
                         className={cn(
                           "text-blue-600 hover:text-blue-900 disabled:text-gray-400 disabled:cursor-not-allowed",
-                          playingId === recording.id && "animate-pulse"
+                          playingId === recording.id && "animate-pulse",
                         )}
                         title="Play recording"
                       >
@@ -313,7 +337,7 @@ export function Recordings() {
                       </button>
                       <button
                         onClick={() => handleDownload(recording)}
-                        disabled={recording.status !== 'completed'}
+                        disabled={recording.status !== "completed"}
                         className="text-green-600 hover:text-green-900 disabled:text-gray-400 disabled:cursor-not-allowed"
                         title="Download recording"
                       >
@@ -339,9 +363,13 @@ export function Recordings() {
         {!isLoading && recordings.data.length === 0 && (
           <div className="px-6 py-12 text-center">
             <FileVideo className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No recordings found</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              No recordings found
+            </h3>
             <p className="mt-1 text-sm text-gray-500">
-              {searchTerm ? 'No recordings match your search criteria.' : 'No recordings have been made yet.'}
+              {searchTerm
+                ? "No recordings match your search criteria."
+                : "No recordings have been made yet."}
             </p>
           </div>
         )}
@@ -351,8 +379,8 @@ export function Recordings() {
           <div className="px-6 py-4 border-t border-gray-200">
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-500">
-                Showing {((currentPage - 1) * recordings.limit) + 1} to{' '}
-                {Math.min(currentPage * recordings.limit, recordings.total)} of{' '}
+                Showing {(currentPage - 1) * recordings.limit + 1} to{" "}
+                {Math.min(currentPage * recordings.limit, recordings.total)} of{" "}
                 {recordings.total} results
               </div>
               <div className="flex items-center space-x-2">
@@ -364,7 +392,7 @@ export function Recordings() {
                   <ChevronLeft className="h-4 w-4" />
                   <span>Previous</span>
                 </button>
-                
+
                 <div className="flex space-x-1">
                   {generatePageNumbers().map((page) => (
                     <button
@@ -374,16 +402,20 @@ export function Recordings() {
                         "px-3 py-1 rounded",
                         page === currentPage
                           ? "bg-primary text-primary-foreground"
-                          : "border border-gray-300 hover:bg-gray-50"
+                          : "border border-gray-300 hover:bg-gray-50",
                       )}
                     >
                       {page}
                     </button>
                   ))}
                 </div>
-                
+
                 <button
-                  onClick={() => setCurrentPage(Math.min(recordings.totalPages, currentPage + 1))}
+                  onClick={() =>
+                    setCurrentPage(
+                      Math.min(recordings.totalPages, currentPage + 1),
+                    )
+                  }
                   disabled={currentPage === recordings.totalPages}
                   className="flex items-center px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
