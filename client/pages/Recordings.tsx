@@ -12,6 +12,7 @@ import {
   FileVideo,
   Filter,
 } from "lucide-react";
+import { AudioPlayer } from "@/components/AudioPlayer";
 
 // API function to fetch recordings
 const fetchRecordings = async (
