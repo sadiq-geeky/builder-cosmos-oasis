@@ -34,7 +34,11 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
 
     const handleLoadedMetadata = () => {
       // Check if duration is valid before setting
-      if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
+      if (
+        audio.duration &&
+        !isNaN(audio.duration) &&
+        isFinite(audio.duration)
+      ) {
         setDuration(audio.duration);
         setMetadataLoaded(true);
         setIsLoading(false);
@@ -43,7 +47,12 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
 
     const handleCanPlay = () => {
       // Fallback: try to get duration when audio can play
-      if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration) && !metadataLoaded) {
+      if (
+        audio.duration &&
+        !isNaN(audio.duration) &&
+        isFinite(audio.duration) &&
+        !metadataLoaded
+      ) {
         setDuration(audio.duration);
         setMetadataLoaded(true);
         setIsLoading(false);
@@ -80,7 +89,9 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
       if (isLoading) {
         setIsLoading(false);
         setMetadataLoaded(true);
-        console.warn("Audio metadata loading timeout - proceeding without duration");
+        console.warn(
+          "Audio metadata loading timeout - proceeding without duration",
+        );
       }
     }, 10000);
 
@@ -176,7 +187,8 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  const progress = duration > 0 && metadataLoaded ? (currentTime / duration) * 100 : 0;
+  const progress =
+    duration > 0 && metadataLoaded ? (currentTime / duration) * 100 : 0;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
