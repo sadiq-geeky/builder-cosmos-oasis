@@ -21,11 +21,15 @@ export const pool = mysql.createPool(dbConfig);
 export async function testConnection() {
   try {
     const connection = await pool.getConnection();
-    console.log("✅ Database connected successfully");
+    console.log("✅ Database connected successfully to", dbConfig.database);
     connection.release();
     return true;
   } catch (error) {
     console.error("❌ Database connection failed:", error);
+    console.error("   Host:", dbConfig.host);
+    console.error("   Port:", dbConfig.port);
+    console.error("   Database:", dbConfig.database);
+    console.error("   User:", dbConfig.user);
     return false;
   }
 }
