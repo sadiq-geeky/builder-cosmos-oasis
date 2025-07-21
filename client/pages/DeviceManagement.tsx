@@ -84,17 +84,14 @@ export function DeviceManagement() {
     device.device_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (newDevice.ip_address && newDevice.device_name) {
-      const device: DeviceMapping = {
-        id: Date.now().toString(),
-        ip_address: newDevice.ip_address,
-        device_name: newDevice.device_name,
-        created_on: new Date().toISOString(),
-      };
-      setDevices([...devices, device]);
-      setNewDevice({ ip_address: '', device_name: '' });
-      setIsAdding(false);
+      const created = await createDeviceAPI(newDevice);
+      if (created) {
+        setNewDevice({ ip_address: '', device_name: '' });
+        setIsAdding(false);
+        loadDevices(); // Reload the list
+      }
     }
   };
 
@@ -104,17 +101,32 @@ export function DeviceManagement() {
     ));
   };
 
-  const handleDelete = (id: string) => {
-    setDevices(devices.filter(device => device.id !== id));
+  const handleDelete = async (id: string) => {
+    const success = await deleteDeviceAPI(id);
+    if (success) {
+      loadDevices(); // Reload the list
+    }
   };
 
-  const handleSaveEdit = () => {
-    setEditingId(null);
+  const handleSaveEdit = async () => {
+    if (editingId) {
+      const device = devices.find(d => d.id === editingId);
+      if (device) {
+        const success = await updateDeviceAPI(editingId, {
+          ip_address: device.ip_address,
+          device_name: device.device_name,
+        });
+        if (success) {
+          setEditingId(null);
+          loadDevices(); // Reload the list
+        }
+      }
+    }
   };
 
   const handleCancelEdit = () => {
     setEditingId(null);
-    // Reload original data in real app
+    loadDevices(); // Reload original data
   };
 
   return (
