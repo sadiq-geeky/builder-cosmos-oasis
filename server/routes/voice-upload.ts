@@ -140,8 +140,6 @@ export const uploadVoice: RequestHandler = async (req, res) => {
 
     // Success response
     response.success = true;
-    response.file_path = `uploads/${newFilename}`;
-    response.uuid = id;
     response.playback_url = `/api/audio/${newFilename}`; // For UI playback
 
     res.json(response);
