@@ -145,12 +145,35 @@ export function Recordings() {
     setCurrentPage(1);
   };
 
-  const handlePlay = (recording: RecordingHistory) => {
+    const handlePlay = (recording: RecordingHistory) => {
     if (recording.status === 'completed' && recording.file_name) {
       setPlayingId(recording.id);
-      // In a real app, this would open a video player modal or redirect to streaming URL
-      alert(`Playing: ${recording.file_name}\n\nIn a real implementation, this would open a video player.`);
-      setTimeout(() => setPlayingId(null), 2000);
+
+      // Check if it's an audio file (mp3, wav) or video
+      const isAudio = recording.file_name.toLowerCase().includes('.mp3') ||
+                     recording.file_name.toLowerCase().includes('.wav');
+
+      if (isAudio) {
+        // Create and play audio element
+        const audio = new Audio(`/api/audio/${recording.file_name}`);
+        audio.play().catch(error => {
+          console.error('Error playing audio:', error);
+          alert('Error playing audio file');
+        });
+
+        audio.addEventListener('ended', () => {
+          setPlayingId(null);
+        });
+
+        audio.addEventListener('error', () => {
+          setPlayingId(null);
+          alert('Error loading audio file');
+        });
+      } else {
+        // For video files, show alert (or implement video player)
+        alert(`Playing: ${recording.file_name}\n\nIn a real implementation, this would open a video player.`);
+        setTimeout(() => setPlayingId(null), 2000);
+      }
     }
   };
 
