@@ -3,25 +3,20 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { initializeDatabase } from "./config/database";
 
-// Import mock routes (default)
-import { getHeartbeats, postHeartbeat } from "./routes/heartbeat";
+// Production database routes only
+import { getHeartbeats, postHeartbeat } from "./routes/heartbeat-db";
 import {
   getDevices,
   createDevice,
   updateDevice,
   deleteDevice,
-} from "./routes/devices";
+} from "./routes/devices-db";
 import {
   getRecordings,
   getRecording,
-  getRecordingStream,
-  downloadRecording,
-} from "./routes/recordings";
-
-// Import database routes (uncomment to use real MySQL)
-// import { getHeartbeats, postHeartbeat } from "./routes/heartbeat-db";
-// import { getDevices, createDevice, updateDevice, deleteDevice } from "./routes/devices-db";
-// import { getRecordings, getRecording, createRecording, updateRecording } from "./routes/recordings-db";
+  createRecording,
+  updateRecording,
+} from "./routes/recordings-db";
 
 // Import the PHP-equivalent heartbeat submit route
 import { submitHeartbeat } from "./routes/heartbeat-submit";
