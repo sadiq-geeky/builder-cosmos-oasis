@@ -34,9 +34,12 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
-  // Heartbeat routes
+    // Heartbeat routes
   app.get("/api/heartbeats", getHeartbeats);
   app.post("/api/heartbeats", postHeartbeat);
+
+  // PHP-equivalent heartbeat submit route
+  app.post("/api/heartbeat/submit", submitHeartbeat);
 
   // Device management routes
   app.get("/api/devices", getDevices);
