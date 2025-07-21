@@ -35,6 +35,7 @@ export interface RecordingHistory {
   created_on: string | null;
   ip_address: string | null;
   duration?: number;
+  duration_seconds?: number;
   status: 'completed' | 'in_progress' | 'failed';
 }
 
