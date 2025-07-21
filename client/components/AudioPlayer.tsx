@@ -26,14 +26,28 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
   const [isMuted, setIsMuted] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [metadataLoaded, setMetadataLoaded] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const handleLoadedMetadata = () => {
-      setDuration(audio.duration);
-      setIsLoading(false);
+      // Check if duration is valid before setting
+      if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
+        setDuration(audio.duration);
+        setMetadataLoaded(true);
+        setIsLoading(false);
+      }
+    };
+
+    const handleCanPlay = () => {
+      // Fallback: try to get duration when audio can play
+      if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration) && !metadataLoaded) {
+        setDuration(audio.duration);
+        setMetadataLoaded(true);
+        setIsLoading(false);
+      }
     };
 
     const handleTimeUpdate = () => {
