@@ -466,6 +466,15 @@ export function Recordings() {
           </div>
         )}
       </div>
+
+      {/* Advanced Audio Player Modal */}
+      {showAudioPlayer && (
+        <AudioPlayer
+          audioUrl={currentAudioUrl}
+          fileName={currentFileName}
+          onClose={handleCloseAudioPlayer}
+        />
+      )}
     </div>
   );
 }
