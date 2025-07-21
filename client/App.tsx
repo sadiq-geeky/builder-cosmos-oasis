@@ -23,8 +23,8 @@ const App = () => (
         <DashboardLayout>
           <Routes>
             <Route path="/" element={<DeviceMonitoring />} />
-            <Route path="/devices" element={<DeviceManagement />} />
             <Route path="/recordings" element={<Recordings />} />
+            <Route path="/devices" element={<DeviceManagement />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
