@@ -209,12 +209,14 @@ export function DeviceMonitoring() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Last Seen
                 </th>
-
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {devices.map((device, index) => (
-                <tr key={device.device_name || `device-${index}`} className="hover:bg-gray-50">
+                <tr
+                  key={device.device_name || `device-${index}`}
+                  className="hover:bg-gray-50"
+                >
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     {device.device_name}
                   </td>
@@ -232,7 +234,6 @@ export function DeviceMonitoring() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {formatLastSeen(device.last_seen)}
                   </td>
-
                 </tr>
               ))}
             </tbody>

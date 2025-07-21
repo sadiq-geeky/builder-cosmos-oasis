@@ -79,10 +79,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       {/* Desktop sidebar */}
-      <div className={cn(
-        "hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300",
-        sidebarCollapsed ? "lg:w-16" : "lg:w-72"
-      )}>
+      <div
+        className={cn(
+          "hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300",
+          sidebarCollapsed ? "lg:w-16" : "lg:w-72",
+        )}
+      >
         <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white pb-4 relative">
           {/* Collapse Toggle Button */}
           <button
@@ -96,7 +98,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             )}
           </button>
 
-          <div className={cn("flex h-16 shrink-0 items-center", sidebarCollapsed ? "px-3" : "px-6")}>
+          <div
+            className={cn(
+              "flex h-16 shrink-0 items-center",
+              sidebarCollapsed ? "px-3" : "px-6",
+            )}
+          >
             <div className="flex items-center space-x-2">
               <Activity className="h-8 w-8 text-primary" />
               {!sidebarCollapsed && (
@@ -107,7 +114,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </div>
 
-          <nav className={cn("flex flex-1 flex-col", sidebarCollapsed ? "px-2" : "px-6")}>
+          <nav
+            className={cn(
+              "flex flex-1 flex-col",
+              sidebarCollapsed ? "px-2" : "px-6",
+            )}
+          >
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
                 <ul role="list" className="-mx-2 space-y-1">
@@ -122,7 +134,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                             isActive
                               ? "bg-primary text-primary-foreground"
                               : "text-gray-700 hover:bg-gray-50 hover:text-primary",
-                            sidebarCollapsed && "justify-center"
+                            sidebarCollapsed && "justify-center",
                           )}
                           title={sidebarCollapsed ? item.name : undefined}
                         >
@@ -147,10 +159,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       {/* Main content */}
-      <div className={cn(
-        "transition-all duration-300",
-        sidebarCollapsed ? "lg:pl-16" : "lg:pl-72"
-      )}>
+      <div
+        className={cn(
+          "transition-all duration-300",
+          sidebarCollapsed ? "lg:pl-16" : "lg:pl-72",
+        )}
+      >
         {/* Mobile header */}
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:hidden">
           <button
