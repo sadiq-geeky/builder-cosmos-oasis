@@ -1,15 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
-import { 
-  Play, 
-  Pause, 
-  SkipBack, 
-  SkipForward, 
-  Volume2, 
+import { useState, useRef, useEffect } from "react";
+import {
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Volume2,
   VolumeX,
   RotateCcw,
-  X
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+  X,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface AudioPlayerProps {
   audioUrl: string;
@@ -47,19 +47,19 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
 
     const handleError = () => {
       setIsLoading(false);
-      console.error('Error loading audio file');
+      console.error("Error loading audio file");
     };
 
-    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-    audio.addEventListener('timeupdate', handleTimeUpdate);
-    audio.addEventListener('ended', handleEnded);
-    audio.addEventListener('error', handleError);
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("error", handleError);
 
     return () => {
-      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      audio.removeEventListener('timeupdate', handleTimeUpdate);
-      audio.removeEventListener('ended', handleEnded);
-      audio.removeEventListener('error', handleError);
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("error", handleError);
     };
   }, []);
 
@@ -135,7 +135,7 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
@@ -181,7 +181,7 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
                   onChange={handleSeek}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                   style={{
-                    background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${progress}%, #e5e7eb ${progress}%, #e5e7eb 100%)`
+                    background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${progress}%, #e5e7eb ${progress}%, #e5e7eb 100%)`,
                   }}
                 />
               </div>
@@ -249,7 +249,7 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
                     "px-3 py-1 rounded text-sm transition-colors",
                     playbackRate === rate
                       ? "bg-primary text-primary-foreground"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200",
                   )}
                 >
                   {rate}x
@@ -282,9 +282,10 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
 
             {/* Additional Info */}
             <div className="text-center text-sm text-gray-500">
-              Playback Rate: {playbackRate}x | 
-              Duration: {formatTime(duration)} | 
-              {playbackRate !== 1 && ` Adjusted Duration: ${formatTime(duration / playbackRate)}`}
+              Playback Rate: {playbackRate}x | Duration: {formatTime(duration)}{" "}
+              |
+              {playbackRate !== 1 &&
+                ` Adjusted Duration: ${formatTime(duration / playbackRate)}`}
             </div>
           </div>
         )}
