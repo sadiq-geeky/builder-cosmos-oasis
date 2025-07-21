@@ -68,8 +68,8 @@ export function createServer() {
   // Recording routes
   app.get("/api/recordings", getRecordings);
   app.get("/api/recordings/:id", getRecording);
-  app.get("/api/recordings/:id/stream", getRecordingStream);
-  app.get("/api/recordings/:id/download", downloadRecording);
+  app.post("/api/recordings", createRecording);
+  app.put("/api/recordings/:id", updateRecording);
 
   return app;
 }
