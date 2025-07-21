@@ -75,6 +75,15 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
       audio.load();
     }
 
+    // Timeout fallback: Stop loading after 10 seconds
+    const loadingTimeout = setTimeout(() => {
+      if (isLoading) {
+        setIsLoading(false);
+        setMetadataLoaded(true);
+        console.warn("Audio metadata loading timeout - proceeding without duration");
+      }
+    }, 10000);
+
     return () => {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("canplay", handleCanPlay);
