@@ -201,10 +201,7 @@ export function DeviceMonitoring() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Device UUID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  IP Address
+                  Device Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
@@ -212,19 +209,14 @@ export function DeviceMonitoring() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Last Seen
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Created On
-                </th>
+
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {devices.map((device) => (
-                <tr key={device.uuid} className="hover:bg-gray-50">
+                <tr className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {device.uuid}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {device.ip_address}
+                    {device.device_name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
@@ -240,9 +232,7 @@ export function DeviceMonitoring() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {formatLastSeen(device.last_seen)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(device.created_on).toLocaleString()}
-                  </td>
+
                 </tr>
               ))}
             </tbody>
