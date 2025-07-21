@@ -11,27 +11,57 @@ import {
   Search
 } from 'lucide-react';
 
-// Mock data
-const generateMockDevices = (): DeviceMapping[] => [
-  {
-    id: '1',
-    ip_address: '192.168.1.101',
-    device_name: 'Reception Camera',
-    created_on: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: '2',
-    ip_address: '192.168.1.102',
-    device_name: 'Main Hall Recorder',
-    created_on: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: '3',
-    ip_address: '192.168.1.103',
-    device_name: 'Security Camera 1',
-    created_on: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-];
+// API functions
+const fetchDevices = async (search?: string): Promise<DeviceMapping[]> => {
+  try {
+    const url = search ? `/api/devices?search=${encodeURIComponent(search)}` : '/api/devices';
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to fetch devices');
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching devices:', error);
+    return [];
+  }
+};
+
+const createDeviceAPI = async (device: { ip_address: string; device_name: string }): Promise<DeviceMapping | null> => {
+  try {
+    const response = await fetch('/api/devices', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(device),
+    });
+    if (!response.ok) throw new Error('Failed to create device');
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating device:', error);
+    return null;
+  }
+};
+
+const updateDeviceAPI = async (id: string, updates: Partial<DeviceMapping>): Promise<boolean> => {
+  try {
+    const response = await fetch(`/api/devices/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    });
+    return response.ok;
+  } catch (error) {
+    console.error('Error updating device:', error);
+    return false;
+  }
+};
+
+const deleteDeviceAPI = async (id: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`/api/devices/${id}`, { method: 'DELETE' });
+    return response.ok;
+  } catch (error) {
+    console.error('Error deleting device:', error);
+    return false;
+  }
+};
 
 export function DeviceManagement() {
   const [devices, setDevices] = useState<DeviceMapping[]>([]);
