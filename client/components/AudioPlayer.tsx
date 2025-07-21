@@ -85,6 +85,7 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
     }, 10000);
 
     return () => {
+      clearTimeout(loadingTimeout);
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("canplay", handleCanPlay);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
