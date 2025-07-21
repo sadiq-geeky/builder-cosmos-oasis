@@ -149,8 +149,8 @@ CREATE TABLE device_mappings (
 Copy `.env.example` to `.env` and update with your database credentials:
 
 ```env
-DB_HOST=localhost
-DB_USER=setcrmuser
+DB_HOST=crm-setech.cloud
+DB_USER=setcrminternet
 DB_PASS=password
 DB_NAME=setcrmuis
 DB_PORT=3306
