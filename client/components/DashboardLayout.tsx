@@ -79,17 +79,35 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
-          <div className="flex h-16 shrink-0 items-center">
+      <div className={cn(
+        "hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300",
+        sidebarCollapsed ? "lg:w-16" : "lg:w-72"
+      )}>
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white pb-4 relative">
+          {/* Collapse Toggle Button */}
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="absolute -right-3 top-20 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm hover:bg-gray-50 transition-colors"
+          >
+            {sidebarCollapsed ? (
+              <ChevronRight className="h-4 w-4 text-gray-600" />
+            ) : (
+              <ChevronLeft className="h-4 w-4 text-gray-600" />
+            )}
+          </button>
+
+          <div className={cn("flex h-16 shrink-0 items-center", sidebarCollapsed ? "px-3" : "px-6")}>
             <div className="flex items-center space-x-2">
               <Activity className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold text-gray-900">
-                CRM Dashboard
-              </span>
+              {!sidebarCollapsed && (
+                <span className="text-xl font-bold text-gray-900">
+                  CRM Dashboard
+                </span>
+              )}
             </div>
           </div>
-          <nav className="flex flex-1 flex-col">
+
+          <nav className={cn("flex flex-1 flex-col", sidebarCollapsed ? "px-2" : "px-6")}>
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
                 <ul role="list" className="-mx-2 space-y-1">
@@ -104,7 +122,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                             isActive
                               ? "bg-primary text-primary-foreground"
                               : "text-gray-700 hover:bg-gray-50 hover:text-primary",
+                            sidebarCollapsed && "justify-center"
                           )}
+                          title={sidebarCollapsed ? item.name : undefined}
                         >
                           <item.icon
                             className={cn(
@@ -114,7 +134,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                                 : "text-gray-400 group-hover:text-primary",
                             )}
                           />
-                          {item.name}
+                          {!sidebarCollapsed && item.name}
                         </Link>
                       </li>
                     );
