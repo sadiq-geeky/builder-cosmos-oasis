@@ -194,7 +194,7 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
         )}
 
         {/* Player Controls */}
-        {!isLoading && (
+        {!isLoading && metadataLoaded && (
           <div className="space-y-4">
             {/* Progress Bar */}
             <div className="space-y-2">
