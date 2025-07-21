@@ -108,16 +108,18 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !duration || !metadataLoaded) return;
 
     const newTime = parseFloat(e.target.value);
+    if (isNaN(newTime)) return;
+
     audio.currentTime = newTime;
     setCurrentTime(newTime);
   };
 
   const skip = (seconds: number) => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !duration || !metadataLoaded) return;
 
     const newTime = Math.max(0, Math.min(duration, currentTime + seconds));
     audio.currentTime = newTime;
