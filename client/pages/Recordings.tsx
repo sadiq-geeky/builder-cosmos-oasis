@@ -204,21 +204,10 @@ export function Recordings() {
         recording.file_name.toLowerCase().includes(".wav");
 
       if (isAudio) {
-        // Create and play audio element
-        const audio = new Audio(`/api/audio/${recording.file_name}`);
-        audio.play().catch((error) => {
-          console.error("Error playing audio:", error);
-          alert("Error playing audio file");
-        });
-
-        audio.addEventListener("ended", () => {
-          setPlayingId(null);
-        });
-
-        audio.addEventListener("error", () => {
-          setPlayingId(null);
-          alert("Error loading audio file");
-        });
+        // Open advanced audio player
+        setCurrentAudioUrl(`/api/audio/${recording.file_name}`);
+        setCurrentFileName(recording.file_name);
+        setShowAudioPlayer(true);
       } else {
         // For video files, show alert (or implement video player)
         alert(
@@ -227,6 +216,13 @@ export function Recordings() {
         setTimeout(() => setPlayingId(null), 2000);
       }
     }
+  };
+
+  const handleCloseAudioPlayer = () => {
+    setShowAudioPlayer(false);
+    setPlayingId(null);
+    setCurrentAudioUrl("");
+    setCurrentFileName("");
   };
 
   const handleDownload = (recording: RecordingHistory) => {
