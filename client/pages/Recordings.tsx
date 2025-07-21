@@ -476,6 +476,7 @@ export function Recordings() {
           audioUrl={currentAudioUrl}
           fileName={currentFileName}
           onClose={handleCloseAudioPlayer}
+          databaseDuration={currentRecording?.duration_seconds}
         />
       )}
     </div>
