@@ -13,9 +13,7 @@ export interface DemoResponse {
 
 // Device Heartbeat Types
 export interface HeartbeatRecord {
-  uuid: string;
-  ip_address: string;
-  created_on: string;
+  device_name: string;
   status: 'online' | 'problematic' | 'offline';
   last_seen: string;
 }
