@@ -15,6 +15,7 @@ interface AudioPlayerProps {
   audioUrl: string;
   fileName: string;
   onClose: () => void;
+  databaseDuration?: number; // Duration in seconds from database
 }
 
 export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
