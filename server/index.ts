@@ -16,6 +16,9 @@ import { getRecordings, getRecording, getRecordingStream, downloadRecording } fr
 export function createServer() {
   const app = express();
 
+  // Initialize database connection
+  initializeDatabase().catch(console.error);
+
   // Middleware
   app.use(cors());
   app.use(express.json());
