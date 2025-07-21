@@ -53,14 +53,11 @@ export const getRecordings: RequestHandler = async (req, res) => {
         END as status
       FROM setcrmuis.recording_history 
       ${whereClause}
-      ORDER BY CREATED_ON DESC
-      LIMIT ? OFFSET ?
+            ORDER BY CREATED_ON DESC
+      LIMIT ${limitNum} OFFSET ${offset}
     `;
 
-        const recordings = await executeQuery<RecordingHistory>(
-      dataQuery,
-      [...queryParams, limitNum.toString(), offset.toString()]
-    );
+    const recordings = await executeQuery<RecordingHistory>(dataQuery, queryParams);
 
     const totalPages = Math.ceil(total / limitNum);
 
