@@ -1,9 +1,17 @@
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { initializeDatabase } from "./config/database";
+
+// Import mock routes (default)
 import { getHeartbeats, postHeartbeat } from "./routes/heartbeat";
 import { getDevices, createDevice, updateDevice, deleteDevice } from "./routes/devices";
 import { getRecordings, getRecording, getRecordingStream, downloadRecording } from "./routes/recordings";
+
+// Import database routes (uncomment to use real MySQL)
+// import { getHeartbeats, postHeartbeat } from "./routes/heartbeat-db";
+// import { getDevices, createDevice, updateDevice, deleteDevice } from "./routes/devices-db";
+// import { getRecordings, getRecording, createRecording, updateRecording } from "./routes/recordings-db";
 
 export function createServer() {
   const app = express();
