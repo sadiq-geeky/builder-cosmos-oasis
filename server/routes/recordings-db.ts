@@ -34,7 +34,7 @@ export const getRecordings: RequestHandler = async (req, res) => {
 
     // Get paginated results
     const dataQuery = `
-      SELECT 
+      SELECT
         id,
         cnic,
         start_time,
@@ -42,16 +42,20 @@ export const getRecordings: RequestHandler = async (req, res) => {
         file_name,
         CREATED_ON as created_on,
         ip_address,
-        CASE 
+        CASE
           WHEN end_time IS NOT NULL THEN TIMESTAMPDIFF(MINUTE, start_time, end_time)
           ELSE NULL
         END as duration,
-        CASE 
+        CASE
+          WHEN end_time IS NOT NULL THEN TIMESTAMPDIFF(SECOND, start_time, end_time)
+          ELSE NULL
+        END as duration_seconds,
+        CASE
           WHEN end_time IS NOT NULL AND file_name IS NOT NULL THEN 'completed'
           WHEN start_time IS NOT NULL AND end_time IS NULL THEN 'in_progress'
           ELSE 'failed'
         END as status
-      FROM setcrmuis.recording_history 
+      FROM setcrmuis.recording_history
       ${whereClause}
             ORDER BY CREATED_ON DESC
       LIMIT ${limitNum} OFFSET ${offset}
