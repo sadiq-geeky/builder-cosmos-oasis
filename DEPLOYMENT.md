@@ -26,7 +26,7 @@ This is a production-ready React-based CRM Dashboard with real MySQL database in
 
 ## Database Schema Implementation
 
-The application uses the exact database schema you provided but with mock data. In production, you would replace the mock data with MySQL queries:
+The application uses the exact database schema you provided with full MySQL integration:
 
 ### Heartbeat Table
 ```sql
