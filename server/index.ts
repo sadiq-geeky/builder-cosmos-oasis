@@ -16,6 +16,9 @@ import { getRecordings, getRecording, getRecordingStream, downloadRecording } fr
 // Import the PHP-equivalent heartbeat submit route
 import { submitHeartbeat } from "./routes/heartbeat-submit";
 
+// Import voice upload routes
+import { uploadVoice, uploadMiddleware, serveAudio } from "./routes/voice-upload";
+
 export function createServer() {
   const app = express();
 
