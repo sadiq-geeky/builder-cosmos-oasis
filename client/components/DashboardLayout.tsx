@@ -9,7 +9,8 @@ import {
   X,
   Activity,
   Server,
-  FileVideo
+  FileVideo,
+  Mic
 } from 'lucide-react';
 
 interface DashboardLayoutProps {
