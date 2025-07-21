@@ -84,7 +84,7 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
       audio.load();
     }
 
-    // Timeout fallback: Stop loading after 10 seconds
+    // Timeout fallback: Stop loading after 30 seconds (for large files)
     const loadingTimeout = setTimeout(() => {
       if (isLoading) {
         setIsLoading(false);
@@ -93,7 +93,7 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
           "Audio metadata loading timeout - proceeding without duration",
         );
       }
-    }, 10000);
+    }, 30000);
 
     return () => {
       clearTimeout(loadingTimeout);
