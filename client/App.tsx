@@ -26,6 +26,7 @@ const App = () => (
             <Route path="/" element={<DeviceMonitoring />} />
             <Route path="/devices" element={<DeviceManagement />} />
             <Route path="/recordings" element={<Recordings />} />
+            <Route path="/voice-upload" element={<VoiceUpload />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
