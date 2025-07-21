@@ -18,8 +18,8 @@ interface DashboardLayoutProps {
 
 const navigation = [
   { name: "Device Monitoring", href: "/", icon: Monitor },
-  { name: "Device Management", href: "/devices", icon: Settings },
   { name: "Recordings", href: "/recordings", icon: PlayCircle },
+  { name: "Device Management", href: "/devices", icon: Settings },
 ];
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
