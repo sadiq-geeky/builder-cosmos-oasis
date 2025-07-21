@@ -18,7 +18,7 @@ interface AudioPlayerProps {
   databaseDuration?: number; // Duration in seconds from database
 }
 
-export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
+export function AudioPlayer({ audioUrl, fileName, onClose, databaseDuration }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
