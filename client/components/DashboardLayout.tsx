@@ -21,7 +21,6 @@ const navigation = [
   { name: 'Device Monitoring', href: '/', icon: Monitor },
   { name: 'Device Management', href: '/devices', icon: Settings },
   { name: 'Recordings', href: '/recordings', icon: PlayCircle },
-  { name: 'Voice Upload', href: '/voice-upload', icon: Mic },
 ];
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
