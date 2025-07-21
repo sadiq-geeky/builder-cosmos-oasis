@@ -23,21 +23,21 @@ const fetchRecordings = async (
     const params = new URLSearchParams({
       page: page.toString(),
       limit: limit.toString(),
-      ...(search && { search })
+      ...(search && { search }),
     });
 
     const response = await fetch(`/api/recordings?${params}`);
-    if (!response.ok) throw new Error('Failed to fetch recordings');
+    if (!response.ok) throw new Error("Failed to fetch recordings");
 
     return await response.json();
   } catch (error) {
-    console.error('Error fetching recordings:', error);
+    console.error("Error fetching recordings:", error);
     return {
       data: [],
       total: 0,
       page,
       limit,
-      totalPages: 0
+      totalPages: 0,
     };
   }
 };
@@ -167,14 +167,14 @@ export function Recordings() {
       const result = await fetchRecordings(currentPage, 10, searchTerm);
       setRecordings(result);
     } catch (error) {
-      console.error('Failed to load recordings:', error);
+      console.error("Failed to load recordings:", error);
       // Fallback to empty state
       setRecordings({
         data: [],
         total: 0,
         page: currentPage,
         limit: 10,
-        totalPages: 0
+        totalPages: 0,
       });
     } finally {
       setIsLoading(false);

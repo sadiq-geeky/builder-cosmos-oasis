@@ -7,17 +7,20 @@ This is a production-ready React-based CRM Dashboard with real MySQL database in
 ## Features
 
 ### 🖥️ Device Monitoring
+
 - Real-time heartbeat status monitoring
 - Automatic detection of problematic devices (no heartbeat in 15+ minutes)
 - Online/Problematic/Offline status indicators
 - Auto-refresh every 30 seconds
 
 ### ⚙️ Device Management
+
 - Map IP addresses to friendly device names
 - Add, edit, and delete device mappings
 - Search functionality
 
 ### 📹 Recordings Management
+
 - View recording history with pagination
 - Search by CNIC number
 - Playable functionality (simulated)
@@ -29,11 +32,13 @@ This is a production-ready React-based CRM Dashboard with real MySQL database in
 The application uses the exact database schema you provided with full MySQL integration:
 
 ### Heartbeat Table
+
 ```sql
 SELECT uuid,ip_address,created_on FROM setcrmuis.recording_heartbeat;
 ```
 
 ### Recording History Table
+
 ```sql
 TABLE `recording_history` (
   `id` varchar(250) NOT NULL,
@@ -55,11 +60,13 @@ This project is already configured for Netlify deployment with serverless functi
 
 1. **Connect Repository**: Link your GitHub repository to Netlify
 2. **Build Settings**:
+
    - Build command: `npm run build`
    - Publish directory: `dist/spa`
    - Functions directory: `netlify/functions`
 
 3. **Environment Variables**: Set these in Netlify dashboard:
+
    ```
    NODE_ENV=production
    ```
@@ -199,6 +206,7 @@ For high traffic:
 ## Support
 
 The application is production-ready with:
+
 - ✅ Responsive design
 - ✅ Error handling
 - ✅ Loading states

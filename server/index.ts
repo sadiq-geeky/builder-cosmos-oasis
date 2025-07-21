@@ -40,7 +40,10 @@ export function createServer() {
 
   // Health check route
   app.get("/api/ping", (_req, res) => {
-    res.json({ message: "CRM Dashboard API - Production Ready", timestamp: new Date().toISOString() });
+    res.json({
+      message: "CRM Dashboard API - Production Ready",
+      timestamp: new Date().toISOString(),
+    });
   });
 
   // Heartbeat routes

@@ -1,47 +1,47 @@
-import { useState, useEffect } from 'react';
-import { HeartbeatRecord } from '@shared/api';
-import { cn } from '@/lib/utils';
-import { 
-  RefreshCw, 
-  Wifi, 
-  WifiOff, 
+import { useState, useEffect } from "react";
+import { HeartbeatRecord } from "@shared/api";
+import { cn } from "@/lib/utils";
+import {
+  RefreshCw,
+  Wifi,
+  WifiOff,
   AlertTriangle,
   Clock,
-  Monitor
-} from 'lucide-react';
+  Monitor,
+} from "lucide-react";
 
 // Fetch heartbeats from API
 const fetchHeartbeats = async (): Promise<HeartbeatRecord[]> => {
   try {
-    const response = await fetch('/api/heartbeats');
+    const response = await fetch("/api/heartbeats");
     if (!response.ok) {
-      throw new Error('Failed to fetch heartbeats');
+      throw new Error("Failed to fetch heartbeats");
     }
     return await response.json();
   } catch (error) {
-    console.error('Error fetching heartbeats:', error);
+    console.error("Error fetching heartbeats:", error);
     return [];
   }
 };
 
-const getStatusColor = (status: HeartbeatRecord['status']) => {
+const getStatusColor = (status: HeartbeatRecord["status"]) => {
   switch (status) {
-    case 'online':
-      return 'text-green-600 bg-green-50';
-    case 'problematic':
-      return 'text-yellow-600 bg-yellow-50';
-    case 'offline':
-      return 'text-red-600 bg-red-50';
+    case "online":
+      return "text-green-600 bg-green-50";
+    case "problematic":
+      return "text-yellow-600 bg-yellow-50";
+    case "offline":
+      return "text-red-600 bg-red-50";
   }
 };
 
-const getStatusIcon = (status: HeartbeatRecord['status']) => {
+const getStatusIcon = (status: HeartbeatRecord["status"]) => {
   switch (status) {
-    case 'online':
+    case "online":
       return <Wifi className="h-4 w-4" />;
-    case 'problematic':
+    case "problematic":
       return <AlertTriangle className="h-4 w-4" />;
-    case 'offline':
+    case "offline":
       return <WifiOff className="h-4 w-4" />;
   }
 };
@@ -58,7 +58,7 @@ export function DeviceMonitoring() {
       setDevices(heartbeats);
       setLastUpdate(new Date());
     } catch (error) {
-      console.error('Failed to load devices:', error);
+      console.error("Failed to load devices:", error);
     } finally {
       setIsRefreshing(false);
     }
@@ -66,27 +66,29 @@ export function DeviceMonitoring() {
 
   useEffect(() => {
     loadDevices();
-    
+
     // Auto-refresh every 30 seconds
     const interval = setInterval(loadDevices, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  const onlineCount = devices.filter(d => d.status === 'online').length;
-  const problematicCount = devices.filter(d => d.status === 'problematic').length;
-  const offlineCount = devices.filter(d => d.status === 'offline').length;
+  const onlineCount = devices.filter((d) => d.status === "online").length;
+  const problematicCount = devices.filter(
+    (d) => d.status === "problematic",
+  ).length;
+  const offlineCount = devices.filter((d) => d.status === "offline").length;
 
   const formatLastSeen = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffMinutes = Math.floor((now.getTime() - date.getTime()) / 60000);
-    
-    if (diffMinutes < 1) return 'Just now';
-    if (diffMinutes === 1) return '1 minute ago';
+
+    if (diffMinutes < 1) return "Just now";
+    if (diffMinutes === 1) return "1 minute ago";
     if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
-    
+
     const diffHours = Math.floor(diffMinutes / 60);
-    if (diffHours === 1) return '1 hour ago';
+    if (diffHours === 1) return "1 hour ago";
     return `${diffHours} hours ago`;
   };
 
@@ -95,18 +97,24 @@ export function DeviceMonitoring() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Device Monitoring</h1>
-          <p className="text-gray-600">Monitor device heartbeats and connection status</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Device Monitoring
+          </h1>
+          <p className="text-gray-600">
+            Monitor device heartbeats and connection status
+          </p>
         </div>
         <button
           onClick={loadDevices}
           disabled={isRefreshing}
           className={cn(
             "flex items-center space-x-2 rounded-lg bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 transition-colors",
-            isRefreshing && "opacity-50 cursor-not-allowed"
+            isRefreshing && "opacity-50 cursor-not-allowed",
           )}
         >
-          <RefreshCw className={cn("h-4 w-4", isRefreshing && "animate-spin")} />
+          <RefreshCw
+            className={cn("h-4 w-4", isRefreshing && "animate-spin")}
+          />
           <span>Refresh</span>
         </button>
       </div>
@@ -119,8 +127,12 @@ export function DeviceMonitoring() {
               <Monitor className="h-8 w-8 text-gray-600" />
             </div>
             <div className="ml-4">
-              <div className="text-sm font-medium text-gray-500">Total Devices</div>
-              <div className="text-2xl font-bold text-gray-900">{devices.length}</div>
+              <div className="text-sm font-medium text-gray-500">
+                Total Devices
+              </div>
+              <div className="text-2xl font-bold text-gray-900">
+                {devices.length}
+              </div>
             </div>
           </div>
         </div>
@@ -132,7 +144,9 @@ export function DeviceMonitoring() {
             </div>
             <div className="ml-4">
               <div className="text-sm font-medium text-gray-500">Online</div>
-              <div className="text-2xl font-bold text-green-600">{onlineCount}</div>
+              <div className="text-2xl font-bold text-green-600">
+                {onlineCount}
+              </div>
             </div>
           </div>
         </div>
@@ -143,8 +157,12 @@ export function DeviceMonitoring() {
               <AlertTriangle className="h-8 w-8 text-yellow-600" />
             </div>
             <div className="ml-4">
-              <div className="text-sm font-medium text-gray-500">Problematic</div>
-              <div className="text-2xl font-bold text-yellow-600">{problematicCount}</div>
+              <div className="text-sm font-medium text-gray-500">
+                Problematic
+              </div>
+              <div className="text-2xl font-bold text-yellow-600">
+                {problematicCount}
+              </div>
             </div>
           </div>
         </div>
@@ -156,7 +174,9 @@ export function DeviceMonitoring() {
             </div>
             <div className="ml-4">
               <div className="text-sm font-medium text-gray-500">Offline</div>
-              <div className="text-2xl font-bold text-red-600">{offlineCount}</div>
+              <div className="text-2xl font-bold text-red-600">
+                {offlineCount}
+              </div>
             </div>
           </div>
         </div>
@@ -166,14 +186,16 @@ export function DeviceMonitoring() {
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">Device Status</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Device Status
+            </h2>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <Clock className="h-4 w-4" />
               <span>Last updated: {lastUpdate.toLocaleTimeString()}</span>
             </div>
           </div>
         </div>
-        
+
         <div className="overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -205,10 +227,12 @@ export function DeviceMonitoring() {
                     {device.ip_address}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={cn(
-                      "inline-flex items-center space-x-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
-                      getStatusColor(device.status)
-                    )}>
+                    <span
+                      className={cn(
+                        "inline-flex items-center space-x-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
+                        getStatusColor(device.status),
+                      )}
+                    >
                       {getStatusIcon(device.status)}
                       <span className="capitalize">{device.status}</span>
                     </span>
@@ -228,8 +252,12 @@ export function DeviceMonitoring() {
         {devices.length === 0 && (
           <div className="px-6 py-12 text-center">
             <Monitor className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No devices found</h3>
-            <p className="mt-1 text-sm text-gray-500">No device heartbeats have been recorded yet.</p>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              No devices found
+            </h3>
+            <p className="mt-1 text-sm text-gray-500">
+              No device heartbeats have been recorded yet.
+            </p>
           </div>
         )}
       </div>

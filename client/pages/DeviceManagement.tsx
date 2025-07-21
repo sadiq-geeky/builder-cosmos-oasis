@@ -1,64 +1,64 @@
-import { useState, useEffect } from 'react';
-import { DeviceMapping } from '@shared/api';
-import { cn } from '@/lib/utils';
-import { 
-  Plus, 
-  Pencil, 
-  Trash2, 
-  Save, 
-  X,
-  Settings,
-  Search
-} from 'lucide-react';
+import { useState, useEffect } from "react";
+import { DeviceMapping } from "@shared/api";
+import { cn } from "@/lib/utils";
+import { Plus, Pencil, Trash2, Save, X, Settings, Search } from "lucide-react";
 
 // API functions
 const fetchDevices = async (search?: string): Promise<DeviceMapping[]> => {
   try {
-    const url = search ? `/api/devices?search=${encodeURIComponent(search)}` : '/api/devices';
+    const url = search
+      ? `/api/devices?search=${encodeURIComponent(search)}`
+      : "/api/devices";
     const response = await fetch(url);
-    if (!response.ok) throw new Error('Failed to fetch devices');
+    if (!response.ok) throw new Error("Failed to fetch devices");
     return await response.json();
   } catch (error) {
-    console.error('Error fetching devices:', error);
+    console.error("Error fetching devices:", error);
     return [];
   }
 };
 
-const createDeviceAPI = async (device: { ip_address: string; device_name: string }): Promise<DeviceMapping | null> => {
+const createDeviceAPI = async (device: {
+  ip_address: string;
+  device_name: string;
+}): Promise<DeviceMapping | null> => {
   try {
-    const response = await fetch('/api/devices', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/devices", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(device),
     });
-    if (!response.ok) throw new Error('Failed to create device');
+    if (!response.ok) throw new Error("Failed to create device");
     return await response.json();
   } catch (error) {
-    console.error('Error creating device:', error);
+    console.error("Error creating device:", error);
     return null;
   }
 };
 
-const updateDeviceAPI = async (id: string, updates: Partial<DeviceMapping>): Promise<boolean> => {
+const updateDeviceAPI = async (
+  id: string,
+  updates: Partial<DeviceMapping>,
+): Promise<boolean> => {
   try {
     const response = await fetch(`/api/devices/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updates),
     });
     return response.ok;
   } catch (error) {
-    console.error('Error updating device:', error);
+    console.error("Error updating device:", error);
     return false;
   }
 };
 
 const deleteDeviceAPI = async (id: string): Promise<boolean> => {
   try {
-    const response = await fetch(`/api/devices/${id}`, { method: 'DELETE' });
+    const response = await fetch(`/api/devices/${id}`, { method: "DELETE" });
     return response.ok;
   } catch (error) {
-    console.error('Error deleting device:', error);
+    console.error("Error deleting device:", error);
     return false;
   }
 };
@@ -67,8 +67,11 @@ export function DeviceManagement() {
   const [devices, setDevices] = useState<DeviceMapping[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [newDevice, setNewDevice] = useState({ ip_address: '', device_name: '' });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [newDevice, setNewDevice] = useState({
+    ip_address: "",
+    device_name: "",
+  });
 
   const loadDevices = async () => {
     const deviceList = await fetchDevices(searchTerm);
@@ -79,26 +82,33 @@ export function DeviceManagement() {
     loadDevices();
   }, [searchTerm]);
 
-  const filteredDevices = devices.filter(device =>
-    device.ip_address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    device.device_name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredDevices = devices.filter(
+    (device) =>
+      device.ip_address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      device.device_name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleAdd = async () => {
     if (newDevice.ip_address && newDevice.device_name) {
       const created = await createDeviceAPI(newDevice);
       if (created) {
-        setNewDevice({ ip_address: '', device_name: '' });
+        setNewDevice({ ip_address: "", device_name: "" });
         setIsAdding(false);
         loadDevices(); // Reload the list
       }
     }
   };
 
-  const handleEdit = (id: string, field: keyof DeviceMapping, value: string) => {
-    setDevices(devices.map(device =>
-      device.id === id ? { ...device, [field]: value } : device
-    ));
+  const handleEdit = (
+    id: string,
+    field: keyof DeviceMapping,
+    value: string,
+  ) => {
+    setDevices(
+      devices.map((device) =>
+        device.id === id ? { ...device, [field]: value } : device,
+      ),
+    );
   };
 
   const handleDelete = async (id: string) => {
@@ -110,7 +120,7 @@ export function DeviceManagement() {
 
   const handleSaveEdit = async () => {
     if (editingId) {
-      const device = devices.find(d => d.id === editingId);
+      const device = devices.find((d) => d.id === editingId);
       if (device) {
         const success = await updateDeviceAPI(editingId, {
           ip_address: device.ip_address,
@@ -134,8 +144,12 @@ export function DeviceManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Device Management</h1>
-          <p className="text-gray-600">Manage IP address to device name mappings</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Device Management
+          </h1>
+          <p className="text-gray-600">
+            Manage IP address to device name mappings
+          </p>
         </div>
         <button
           onClick={() => setIsAdding(true)}
@@ -163,9 +177,11 @@ export function DeviceManagement() {
       {/* Device List */}
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Device Mappings</h2>
+          <h2 className="text-lg font-semibold text-gray-900">
+            Device Mappings
+          </h2>
         </div>
-        
+
         <div className="overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -194,7 +210,12 @@ export function DeviceManagement() {
                       placeholder="192.168.1.xxx"
                       className="w-full px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent"
                       value={newDevice.ip_address}
-                      onChange={(e) => setNewDevice({ ...newDevice, ip_address: e.target.value })}
+                      onChange={(e) =>
+                        setNewDevice({
+                          ...newDevice,
+                          ip_address: e.target.value,
+                        })
+                      }
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -203,7 +224,12 @@ export function DeviceManagement() {
                       placeholder="Device Name"
                       className="w-full px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent"
                       value={newDevice.device_name}
-                      onChange={(e) => setNewDevice({ ...newDevice, device_name: e.target.value })}
+                      onChange={(e) =>
+                        setNewDevice({
+                          ...newDevice,
+                          device_name: e.target.value,
+                        })
+                      }
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -220,7 +246,7 @@ export function DeviceManagement() {
                       <button
                         onClick={() => {
                           setIsAdding(false);
-                          setNewDevice({ ip_address: '', device_name: '' });
+                          setNewDevice({ ip_address: "", device_name: "" });
                         }}
                         className="text-gray-600 hover:text-gray-900"
                       >
@@ -240,10 +266,14 @@ export function DeviceManagement() {
                         type="text"
                         className="w-full px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent"
                         value={device.ip_address}
-                        onChange={(e) => handleEdit(device.id, 'ip_address', e.target.value)}
+                        onChange={(e) =>
+                          handleEdit(device.id, "ip_address", e.target.value)
+                        }
                       />
                     ) : (
-                      <span className="text-sm font-medium text-gray-900">{device.ip_address}</span>
+                      <span className="text-sm font-medium text-gray-900">
+                        {device.ip_address}
+                      </span>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -252,10 +282,14 @@ export function DeviceManagement() {
                         type="text"
                         className="w-full px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-transparent"
                         value={device.device_name}
-                        onChange={(e) => handleEdit(device.id, 'device_name', e.target.value)}
+                        onChange={(e) =>
+                          handleEdit(device.id, "device_name", e.target.value)
+                        }
                       />
                     ) : (
-                      <span className="text-sm text-gray-900">{device.device_name}</span>
+                      <span className="text-sm text-gray-900">
+                        {device.device_name}
+                      </span>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -303,9 +337,13 @@ export function DeviceManagement() {
         {filteredDevices.length === 0 && !isAdding && (
           <div className="px-6 py-12 text-center">
             <Settings className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No devices found</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              No devices found
+            </h3>
             <p className="mt-1 text-sm text-gray-500">
-              {searchTerm ? 'No devices match your search criteria.' : 'No device mappings have been created yet.'}
+              {searchTerm
+                ? "No devices match your search criteria."
+                : "No device mappings have been created yet."}
             </p>
           </div>
         )}

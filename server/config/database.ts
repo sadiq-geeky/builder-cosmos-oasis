@@ -54,8 +54,12 @@ export async function initializeDatabase() {
   const connected = await testConnection();
 
   if (!connected) {
-    console.error("🚨 Failed to connect to database. Please check your database configuration.");
-    console.error("💡 Make sure your .env file has the correct database credentials:");
+    console.error(
+      "🚨 Failed to connect to database. Please check your database configuration.",
+    );
+    console.error(
+      "💡 Make sure your .env file has the correct database credentials:",
+    );
     console.error("   DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT");
     process.exit(1);
   }
