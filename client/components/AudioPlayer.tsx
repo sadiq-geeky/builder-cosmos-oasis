@@ -65,17 +65,24 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
     };
 
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("canplay", handleCanPlay);
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("ended", handleEnded);
     audio.addEventListener("error", handleError);
 
+    // Force load if src is already set
+    if (audio.src) {
+      audio.load();
+    }
+
     return () => {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.removeEventListener("canplay", handleCanPlay);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("error", handleError);
     };
-  }, []);
+  }, [metadataLoaded]);
 
   const togglePlayPause = () => {
     const audio = audioRef.current;
