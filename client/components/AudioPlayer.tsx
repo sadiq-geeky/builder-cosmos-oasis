@@ -22,12 +22,12 @@ export function AudioPlayer({ audioUrl, fileName, onClose, databaseDuration }: A
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(databaseDuration || 0);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const [metadataLoaded, setMetadataLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(!databaseDuration);
+  const [metadataLoaded, setMetadataLoaded] = useState(!!databaseDuration);
 
   useEffect(() => {
     const audio = audioRef.current;
