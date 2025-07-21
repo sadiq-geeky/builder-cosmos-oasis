@@ -186,7 +186,7 @@ export function AudioPlayer({ audioUrl, fileName, onClose }: AudioPlayerProps) {
         <audio ref={audioRef} src={audioUrl} preload="metadata" />
 
         {/* Loading State */}
-        {isLoading && (
+        {(isLoading || !metadataLoaded) && (
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
             <p className="mt-2 text-sm text-gray-500">Loading audio...</p>
