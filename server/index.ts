@@ -38,12 +38,10 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // Example API routes
+  // Health check route
   app.get("/api/ping", (_req, res) => {
-    res.json({ message: "Hello from CRM Dashboard server!" });
+    res.json({ message: "CRM Dashboard API - Production Ready", timestamp: new Date().toISOString() });
   });
-
-  app.get("/api/demo", handleDemo);
 
   // Heartbeat routes
   app.get("/api/heartbeats", getHeartbeats);
