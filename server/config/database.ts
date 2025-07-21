@@ -7,11 +7,9 @@ const dbConfig = {
   password: process.env.DB_PASS || "password",
   database: process.env.DB_NAME || "setcrmuis",
   port: parseInt(process.env.DB_PORT || "3306"),
-  waitForConnections: true,
+    waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  acquireTimeout: 60000,
-  timeout: 60000,
 };
 
 // Create connection pool
