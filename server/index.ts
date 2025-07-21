@@ -13,6 +13,9 @@ import { getRecordings, getRecording, getRecordingStream, downloadRecording } fr
 // import { getDevices, createDevice, updateDevice, deleteDevice } from "./routes/devices-db";
 // import { getRecordings, getRecording, createRecording, updateRecording } from "./routes/recordings-db";
 
+// Import the PHP-equivalent heartbeat submit route
+import { submitHeartbeat } from "./routes/heartbeat-submit";
+
 export function createServer() {
   const app = express();
 
