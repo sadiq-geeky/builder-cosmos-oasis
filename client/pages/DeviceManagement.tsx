@@ -70,9 +70,14 @@ export function DeviceManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [newDevice, setNewDevice] = useState({ ip_address: '', device_name: '' });
 
+  const loadDevices = async () => {
+    const deviceList = await fetchDevices(searchTerm);
+    setDevices(deviceList);
+  };
+
   useEffect(() => {
-    setDevices(generateMockDevices());
-  }, []);
+    loadDevices();
+  }, [searchTerm]);
 
   const filteredDevices = devices.filter(device =>
     device.ip_address.toLowerCase().includes(searchTerm.toLowerCase()) ||
