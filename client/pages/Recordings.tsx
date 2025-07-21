@@ -163,12 +163,22 @@ export function Recordings() {
 
   const loadRecordings = async () => {
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const result = generateMockRecordings(currentPage, 10, searchTerm);
+    try {
+      const result = await fetchRecordings(currentPage, 10, searchTerm);
       setRecordings(result);
+    } catch (error) {
+      console.error('Failed to load recordings:', error);
+      // Fallback to empty state
+      setRecordings({
+        data: [],
+        total: 0,
+        page: currentPage,
+        limit: 10,
+        totalPages: 0
+      });
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
 
   useEffect(() => {
