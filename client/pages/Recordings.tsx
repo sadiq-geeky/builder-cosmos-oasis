@@ -205,9 +205,10 @@ export function Recordings() {
         recording.file_name.toLowerCase().includes(".wav");
 
       if (isAudio) {
-        // Open advanced audio player
+        // Open advanced audio player with database metadata
         setCurrentAudioUrl(`/api/audio/${recording.file_name}`);
         setCurrentFileName(recording.file_name);
+        setCurrentRecording(recording);
         setShowAudioPlayer(true);
       } else {
         // For video files, show alert (or implement video player)
