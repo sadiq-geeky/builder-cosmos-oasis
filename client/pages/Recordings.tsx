@@ -13,7 +13,36 @@ import {
   Filter,
 } from "lucide-react";
 
-// Mock data generator
+// API function to fetch recordings
+const fetchRecordings = async (
+  page: number,
+  limit: number,
+  search?: string,
+): Promise<PaginatedResponse<RecordingHistory>> => {
+  try {
+    const params = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+      ...(search && { search })
+    });
+
+    const response = await fetch(`/api/recordings?${params}`);
+    if (!response.ok) throw new Error('Failed to fetch recordings');
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching recordings:', error);
+    return {
+      data: [],
+      total: 0,
+      page,
+      limit,
+      totalPages: 0
+    };
+  }
+};
+
+// Backup mock data for fallback
 const generateMockRecordings = (
   page: number,
   limit: number,
