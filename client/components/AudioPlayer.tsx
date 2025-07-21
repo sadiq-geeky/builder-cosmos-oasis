@@ -334,6 +334,7 @@ export function AudioPlayer({ audioUrl, fileName, onClose, databaseDuration }: A
             {/* Additional Info */}
             <div className="text-center text-sm text-gray-500">
               Playback Rate: {playbackRate}x | Duration: {formatTime(duration)}{" "}
+              {databaseDuration && <span className="text-green-600">(from database)</span>}
               |
               {playbackRate !== 1 &&
                 ` Adjusted Duration: ${formatTime(duration / playbackRate)}`}
