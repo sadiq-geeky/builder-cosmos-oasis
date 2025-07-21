@@ -53,12 +53,15 @@ export function DeviceMonitoring() {
 
   const loadDevices = async () => {
     setIsRefreshing(true);
-    // Simulate API call
-    setTimeout(() => {
-      setDevices(generateMockHeartbeats());
+    try {
+      const heartbeats = await fetchHeartbeats();
+      setDevices(heartbeats);
       setLastUpdate(new Date());
+    } catch (error) {
+      console.error('Failed to load devices:', error);
+    } finally {
       setIsRefreshing(false);
-    }, 500);
+    }
   };
 
   useEffect(() => {
